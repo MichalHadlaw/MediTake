@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
-import com.example.meditake.db.BottomNavBar.MainScreen
+import com.example.meditake.BottomNavBar.MainScreen
 import com.example.meditake.ui.theme.MediTakeTheme
 
 class MainActivity : ComponentActivity() {

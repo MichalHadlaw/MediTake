@@ -1,4 +1,4 @@
-package com.example.meditake.db.BottomNavBar
+package com.example.meditake.BottomNavBar
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
