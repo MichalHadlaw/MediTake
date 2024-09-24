@@ -13,8 +13,8 @@ object ToTakeManager {
         return ToTakeList
     }
 
-    fun addToTake(title: String){
-        ToTakeList.add(ToTake(System.currentTimeMillis().toInt(),title, Date.from(Instant.now())))
+    fun addToTake(title: String,dose: String ){
+        ToTakeList.add(ToTake(System.currentTimeMillis().toInt(),title, dose = dose, Date.from(Instant.now())))
     }
 
     fun deleteToTake(id : Int){

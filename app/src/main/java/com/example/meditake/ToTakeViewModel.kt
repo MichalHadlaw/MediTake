@@ -19,10 +19,10 @@ class ToTakeViewModel : ViewModel(){
 
 
 
-    fun addToTake(title : String){
+    fun addToTake(title : String ,dose: String){
 
         viewModelScope.launch(Dispatchers.IO ){
-            ToTakeDAO.addToTake(ToTake(title = title, createdAt = Date.from(Instant.now())))
+            ToTakeDAO.addToTake(ToTake(title = title, dose = dose ,createdAt = Date.from(Instant.now())))
         }
 
 

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -31,24 +32,47 @@ fun AddPage(viewModel: ToTakeViewModel) {
     var inputText by remember {
         mutableStateOf("")
     }
+    var doseInput by remember {
+        mutableStateOf("") }
 
-
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         OutlinedTextField(
+            modifier = Modifier
+                .padding(8.dp),
             value = inputText,
             onValueChange = {
                 inputText = it
-            }
+            },
+            label = { Text("Title") }
         )
-        Button(onClick = {
-            viewModel.addToTake(inputText)
-            inputText = ""
-        }) {
+
+        OutlinedTextField(
+            modifier = Modifier
+                .padding(8.dp),
+            value = doseInput,
+            onValueChange = {
+                doseInput = it
+            },
+            label = { Text("Dose") }
+        )
+
+
+        Button(
+            modifier = Modifier
+                .padding(8.dp),
+            onClick = {
+                if (inputText.isNotBlank() && doseInput.isNotBlank()) {
+                    viewModel.addToTake(inputText, doseInput) // Nowa funkcja dodawania z dawką
+                    inputText = ""
+                    doseInput = ""
+                }
+            }
+        ) {
             Text(text = "Add")
         }
     }

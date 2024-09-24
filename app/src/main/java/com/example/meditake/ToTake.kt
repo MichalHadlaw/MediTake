@@ -9,6 +9,7 @@ data class ToTake(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var title : String,
+    var dose : String,
     var createdAt : Date
 )
 

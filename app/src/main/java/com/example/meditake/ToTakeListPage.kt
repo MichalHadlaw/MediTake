@@ -41,6 +41,9 @@ fun ToTakeListPage(viewModel: ToTakeViewModel) {
     var inputText by remember {
         mutableStateOf("")
     }
+    var doseInput by remember {
+        mutableStateOf("")
+    }
 
     Column(
         modifier = Modifier
@@ -58,17 +61,30 @@ fun ToTakeListPage(viewModel: ToTakeViewModel) {
                 value = inputText,
                 onValueChange = {
                     inputText = it
-                }
+                },
+                label = { Text("Title") } // Etykieta dla pola tytułu
+            )
+
+            OutlinedTextField(
+                value = doseInput,
+                onValueChange = {
+                    doseInput = it
+                },
+                label = { Text("Dose") } // Etykieta dla pola dawki
             )
             Button(onClick = {
-                viewModel.addToTake(inputText)
-                inputText = ""
+                if (inputText.isNotBlank() && doseInput.isNotBlank()) { // Sprawdź, czy pola nie są puste
+                    viewModel.addToTake(inputText, doseInput) // Dodaj nową funkcję dodawania z dawką
+                    inputText = ""
+                    doseInput = ""
+                }
             }) {
                 Text(text = "Add")
             }
         }
 
-       toTakeList?.let {
+
+        toTakeList?.let {
            LazyColumn(
                content = {
                    itemsIndexed(it) { index: Int, item: ToTake ->
@@ -112,6 +128,15 @@ fun ToTakeItem(item: ToTake,onDelete : ()-> Unit) {
                 fontSize = 20.sp,
                 color = Color.White
             )
+
+            Text(
+                text = "Dose: ${item.dose}", // Wyświetlanie dawki
+                fontSize = 16.sp,
+                color = Color.White
+            )
+
+
+
         }
         IconButton(onClick = onDelete) {
             Icon(
