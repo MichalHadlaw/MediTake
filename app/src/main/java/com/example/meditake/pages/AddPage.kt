@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -32,24 +33,40 @@ fun AddPage(viewModel: ToTakeViewModel) {
         mutableStateOf("")
     }
 
-
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+            Arrangement.SpaceEvenly
     ) {
         OutlinedTextField(
+            modifier = Modifier
+                .padding(8.dp),
             value = inputText,
             onValueChange = {
                 inputText = it
             }
         )
-        Button(onClick = {
+
+        OutlinedTextField(
+            modifier = Modifier
+                .padding(8.dp),
+            value = inputText,
+            onValueChange = {
+                inputText = it
+            }
+        )
+
+
+        Button(
+            modifier = Modifier
+                .padding(8.dp),
+            onClick = {
             viewModel.addToTake(inputText)
             inputText = ""
         }) {
             Text(text = "Add")
         }
     }
+
 }

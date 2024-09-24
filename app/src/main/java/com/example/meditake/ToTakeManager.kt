@@ -13,7 +13,7 @@ object ToTakeManager {
         return ToTakeList
     }
 
-    fun addToTake(title: String){
+    fun addToTake(title: String ){
         ToTakeList.add(ToTake(System.currentTimeMillis().toInt(),title, Date.from(Instant.now())))
     }
 
