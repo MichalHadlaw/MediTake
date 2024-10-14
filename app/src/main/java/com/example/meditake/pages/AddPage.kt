@@ -32,14 +32,12 @@ fun AddPage(viewModel: ToTakeViewModel) {
     var inputText by remember {
         mutableStateOf("")
     }
-    var doseInput by remember {
-        mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        verticalArrangement = Arrangement.SpaceEvenly
+            Arrangement.SpaceEvenly
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -47,18 +45,16 @@ fun AddPage(viewModel: ToTakeViewModel) {
             value = inputText,
             onValueChange = {
                 inputText = it
-            },
-            label = { Text("Title") }
+            }
         )
 
         OutlinedTextField(
             modifier = Modifier
                 .padding(8.dp),
-            value = doseInput,
+            value = inputText,
             onValueChange = {
-                doseInput = it
-            },
-            label = { Text("Dose") }
+                inputText = it
+            }
         )
 
 
@@ -66,14 +62,11 @@ fun AddPage(viewModel: ToTakeViewModel) {
             modifier = Modifier
                 .padding(8.dp),
             onClick = {
-                if (inputText.isNotBlank() && doseInput.isNotBlank()) {
-                    viewModel.addToTake(inputText, doseInput) // Nowa funkcja dodawania z dawką
-                    inputText = ""
-                    doseInput = ""
-                }
-            }
-        ) {
+            viewModel.addToTake(inputText)
+            inputText = ""
+        }) {
             Text(text = "Add")
         }
     }
+
 }
