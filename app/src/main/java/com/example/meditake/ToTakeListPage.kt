@@ -30,81 +30,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.meditake.db.ToTake
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 @Composable
-fun ToTakeListPage(viewModel: ToTakeViewModel) {
-
-    val toTakeList by viewModel.toTakeList.observeAsState()
-    var inputText by remember {
-        mutableStateOf("")
-    }
-    var doseInput by remember {
-        mutableStateOf("")
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding()
-    ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            OutlinedTextField(
-                value = inputText,
-                onValueChange = {
-                    inputText = it
-                },
-                label = { Text("Title") } // Etykieta dla pola tytułu
-            )
-
-            OutlinedTextField(
-                value = doseInput,
-                onValueChange = {
-                    doseInput = it
-                },
-                label = { Text("Dose") } // Etykieta dla pola dawki
-            )
-            Button(onClick = {
-                if (inputText.isNotBlank() && doseInput.isNotBlank()) { // Sprawdź, czy pola nie są puste
-                    viewModel.addToTake(inputText, doseInput) // Dodaj nową funkcję dodawania z dawką
-                    inputText = ""
-                    doseInput = ""
-                }
-            }) {
-                Text(text = "Add")
-            }
-        }
-
-
-        toTakeList?.let {
-           LazyColumn(
-               content = {
-                   itemsIndexed(it) { index: Int, item: ToTake ->
-                       ToTakeItem(item = item, onDelete = {
-                           viewModel.deleteToTake(item.id)
-                       })
-                   }
-               }
-           )
-       }?: Text(
-           modifier = Modifier.fillMaxWidth(),
-           textAlign = TextAlign.Center,
-           text = "No Items Yet",
-           fontSize = 16.sp
-       )
-    }
-}
-
-@Composable
-fun ToTakeItem(item: ToTake,onDelete : ()-> Unit) {
+fun ToTakeItem(item: ToTake, onDelete : ()-> Unit,onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -130,20 +61,38 @@ fun ToTakeItem(item: ToTake,onDelete : ()-> Unit) {
             )
 
             Text(
-                text = "Dose: ${item.dose}", // Wyświetlanie dawki
+                text = "Dose: ${item.dose}",
                 fontSize = 16.sp,
                 color = Color.White
             )
 
-
-
-        }
-        IconButton(onClick = onDelete) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_delete_24),
-                contentDescription = "Delete",
-                tint = Color.White
+            Text(
+                text = "Dosage Time: ${item.dosageTime}",
+                fontSize = 14.sp,
+                color = Color.White
             )
+
+            item.mealVar?.let {
+                Text(
+                    text = "Meal: $it",
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
+
+            Text(
+                text = "Route of Administration: ${item.routeOfAdministration}",
+                fontSize = 14.sp,
+                color = Color.White
+            )
+
+
         }
+
+        androidx.compose.material3.Checkbox(
+            checked = item.isChecked,
+            onCheckedChange = onCheckedChange
+        )
+
     }
 }

@@ -1,4 +1,4 @@
-package com.example.meditake
+package com.example.meditake.Main
 
 import android.app.Application
 import androidx.room.Room
