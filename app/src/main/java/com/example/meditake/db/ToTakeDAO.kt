@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.meditake.ToTake
+import androidx.room.Update
 
 @Dao
 interface ToTakeDAO {
@@ -15,6 +15,11 @@ interface ToTakeDAO {
 
 @Query("Delete FROM ToTake where id = :id")
     fun deleteToTake(id : Int)
+
+    @Query("SELECT * FROM ToTake WHERE id = :id")
+    fun getById(id: Int): ToTake?
+    @Update
+    fun updateToTake(toTake: ToTake)
 
 
 }
