@@ -21,5 +21,10 @@ interface ToTakeDAO {
     @Update
     fun updateToTake(toTake: ToTake)
 
+    @Query("SELECT * FROM ToTake")
+    suspend fun getAllToTakeDirect(): List<ToTake>
+
+    @Query("SELECT * FROM ToTake WHERE id = :id")
+    fun getToTakeById(id: Int): ToTake?
 
 }

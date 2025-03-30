@@ -16,8 +16,10 @@ data class ToTake(
     var routeOfAdministration: String,
     var createdAt : Date,
     var isPrescription: Boolean = false,
-    var isChecked: Boolean = false
-
+    var isChecked: Boolean = false,
+    var tookOnTime: Int = 0,
+    val notTaken: Int = 0,
+    val remainingDoses: Int = numberInPackage
 
 )
 

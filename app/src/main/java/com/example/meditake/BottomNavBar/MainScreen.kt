@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import com.example.meditake.ToTakeViewModel
 import com.example.meditake.pages.AddPage
 import com.example.meditake.pages.HomePage
+
 import com.example.meditake.pages.StatsPage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +34,7 @@ fun MainScreen(modifier: Modifier = Modifier){
     val navItemList = listOf(
         NavItem("Home", Icons.Default.Home, 0),
         NavItem("Add", Icons.Default.Edit, 5),
-        NavItem("Stats", Icons.Default.Star,2),
+        NavItem("Stats", Icons.Default.Star,2)
 
         )
     var selectedIndex by remember {
@@ -79,7 +81,8 @@ fun ContentScreen(modifier: Modifier = Modifier, selectedIndex : Int){
     when(selectedIndex){
         0-> HomePage(ToTakeViewModel())
         1-> AddPage(ToTakeViewModel())
-        2-> StatsPage()
+        2-> StatsPage(ToTakeViewModel())
+
     }
 
 
