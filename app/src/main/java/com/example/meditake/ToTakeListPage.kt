@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,65 +31,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.meditake.db.ToTake
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 @Composable
-fun ToTakeListPage(viewModel: ToTakeViewModel) {
-
-    val toTakeList by viewModel.toTakeList.observeAsState()
-    var inputText by remember {
-        mutableStateOf("")
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding()
-    ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            OutlinedTextField(
-                value = inputText,
-                onValueChange = {
-                    inputText = it
-                }
-            )
-            Button(onClick = {
-                viewModel.addToTake(inputText)
-                inputText = ""
-            }) {
-                Text(text = "Add")
-            }
-        }
-
-       toTakeList?.let {
-           LazyColumn(
-               content = {
-                   itemsIndexed(it) { index: Int, item: ToTake ->
-                       ToTakeItem(item = item, onDelete = {
-                           viewModel.deleteToTake(item.id)
-                       })
-                   }
-               }
-           )
-       }?: Text(
-           modifier = Modifier.fillMaxWidth(),
-           textAlign = TextAlign.Center,
-           text = "No Items Yet",
-           fontSize = 16.sp
-       )
-    }
-}
-
-@Composable
-fun ToTakeItem(item: ToTake,onDelete : ()-> Unit) {
+fun ToTakeItem(
+    item: ToTake,
+    onDelete: () -> Unit,
+    onCheckedChange: (Boolean) -> Unit,
+    onShowDetails: () -> Unit,
+    onIncreaseTookOnTime: () -> Unit,
+    onSendNotification: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,13 +67,101 @@ fun ToTakeItem(item: ToTake,onDelete : ()-> Unit) {
                 fontSize = 20.sp,
                 color = Color.White
             )
-        }
-        IconButton(onClick = onDelete) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_delete_24),
-                contentDescription = "Delete",
-                tint = Color.White
+
+            Text(
+                text = "Dose: ${item.dose}",
+                fontSize = 16.sp,
+                color = Color.White
+            )
+
+            Text(
+                text = "Dosage Time: ${item.dosageTime}",
+                fontSize = 14.sp,
+                color = Color.White
+            )
+
+            item.mealVar?.let {
+                Text(
+                    text = "Meal: $it",
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
+
+            Text(
+                text = "Route of Administration: ${item.routeOfAdministration}",
+                fontSize = 14.sp,
+                color = Color.White
+            )
+
+
+                Text(
+                    text = "Remaining Doses: ${item.remainingDoses}",
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+
+            // Add condition to show "Uzupełnij dawkę" when remaining doses is 5 or less
+            if (item.remainingDoses in 1..8) {
+                Text(
+                    text = "Uzupełnij dawkę",
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            if (item.isPrescription && item.remainingDoses in 0..12) {
+                Text(
+                    text = "Uzupełnij dawkę",
+                    fontSize = 14.sp,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Przycisk do zwiększania TookOnTime
+                Button(
+                    onClick = onIncreaseTookOnTime,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                ) {
+                    Text("Increase TookOnTime")
+                }
+
+                Button(
+                    onClick = onShowDetails, // Otwórz szczegóły po kliknięciu
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+                ) {
+                    Text("Show Details")
+                }
+                Button(
+                    onClick = onSendNotification,
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) {
+                    Text("Notify")
+                }
+            }
+
+            androidx.compose.material3.Checkbox(
+                checked = item.isChecked,
+                onCheckedChange = { isChecked ->
+                    onCheckedChange(isChecked)
+                }
             )
         }
     }
 }
+
